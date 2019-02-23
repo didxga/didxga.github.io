@@ -113,7 +113,7 @@ That is what we want. With the last call sending "end" as parameter we end the c
 
 Now let's look back the question we are given at the begining. We could apply the similar technique to accomplish the currying
 ```javascript
-function currying() {
+function currying(c) {
     var a = "coo";
     function cool(b) {
         if(b === "1") {
@@ -123,9 +123,13 @@ function currying() {
             return cool;
         }
     }
+    if(c === '1') {
+      return a + "l"
+    }
+    a += "o";
     return cool;
 }
-console.log(currying()()()()("1")); //cooooool
+console.log(currying()()("1"));//cooool
 ```
 
 
