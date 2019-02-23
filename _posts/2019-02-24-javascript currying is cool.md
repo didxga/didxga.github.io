@@ -61,7 +61,7 @@ function add(a) {
         function foo(c) {
             return a + b + c;
         }
-        return foo();
+        return foo;
     }
     return bar;
 }
@@ -74,9 +74,9 @@ function add(a) {
             function pony(d) {
                 return a + b + c + d;
             }
-            return pony();
+            return pony;
         }
-        return foo();
+        return foo;
     }
     return bar;
 }
@@ -84,5 +84,48 @@ function add(a) {
 
 support 5 times call
 Wait, we can not continue embed on function inside another function. this is not easy to handle says 100 times curry call in which case you have to nestly embed 100 functions. Are there other ways to achieve that?
+```javascript
+function add(a) {
+    function adder(b) {
+        a += b;
+        return adder;
+    }
+    return adder;
+}
+add(1)(2)(3)(4)
+```
+This implementation sounds good, but look closely, we will find that it does not return the final summation. because we always return adder function after each call. So we need a way to terminate the currying call. Let's refactor the code
+```javascript
+function add(a) {
+    function adder(b) {
+        if(b === "end") {
+            return a;
+        } else {
+            a += b;
+        return adder;
+        }
+    }
+    return adder;
+}
+add(1)(2)(3)(4)("end");
+```
+That is what we want. With the last call sending "end" as parameter we end the currying and return the result of summation
+
+Now let's look back the question we are given at the begining. We could apply the similar technique to accomplish the currying
+```javascript
+function currying() {
+    var a = "coo";
+    function cool(b) {
+        if(b === "1") {
+            return a + "l";
+        } else {
+            a += "o";
+            return cool;
+        }
+    }
+    return cool;
+}
+console.log(currying()()()()("1")); //cooooool
+```
 
 
